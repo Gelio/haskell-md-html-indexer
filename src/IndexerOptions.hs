@@ -1,4 +1,4 @@
-module IndexerOptions (SearchOptions, IndexOptions, Command, Options, parseOptions) where
+module IndexerOptions (SearchOptions(..), IndexOptions(..), Command(..), Options(..), parseOptions) where
 
 import Options.Applicative
 import Control.Monad
