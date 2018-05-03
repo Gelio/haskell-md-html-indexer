@@ -2,12 +2,12 @@ name:                md-html-indexer
 version:             0.1.0.0
 -- synopsis:
 -- description:
-homepage:            https://github.com/githubuser/md-html-indexer#readme
+homepage:            https://github.com/Gelio/haskell-md-html-indexer#readme
 license:             BSD3
 license-file:        LICENSE
-author:              Author name here
-maintainer:          example@example.com
-copyright:           2018 Author name here
+author:              Grzegorz Rozdzialik
+maintainer:          voreny.gelio@gmail.com
+copyright:           2018 Grzegorz Rozdzialik
 category:            Web
 build-type:          Simple
 cabal-version:       >=1.10
