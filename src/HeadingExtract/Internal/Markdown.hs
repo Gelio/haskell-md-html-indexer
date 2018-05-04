@@ -1,4 +1,4 @@
-module HeadingExtract.Markdown (getHeadingsFromMarkdown, getHeadingsFromMarkdown') where
+module HeadingExtract.Internal.Markdown (getHeadingsFromMarkdown, getHeadingsFromMarkdown') where
 
 import Conduit
 import Data.ByteString.Char8 (ByteString)
@@ -6,8 +6,8 @@ import Text.Markdown.Block
 import Text.Markdown (defaultMarkdownSettings)
 import Data.Text (Text)
 
-getHeadingsFromMarkdown :: ConduitT ByteString o (ResourceT IO) ()
-getHeadingsFromMarkdown = decodeUtf8C .| toBlocks defaultMarkdownSettings .| filterC isHeading .| mapC getHeadingText .| mapM_C (lift . print)
+getHeadingsFromMarkdown :: ConduitT ByteString Text (ResourceT IO) ()
+getHeadingsFromMarkdown = decodeUtf8C .| toBlocks defaultMarkdownSettings .| filterC isHeading .| mapC getHeadingText
   where
     isHeading :: Block Text -> Bool
     isHeading (BlockHeading _ _) = True
@@ -17,8 +17,8 @@ getHeadingsFromMarkdown = decodeUtf8C .| toBlocks defaultMarkdownSettings .| fil
     getHeadingText (BlockHeading _ text) = text
     getHeadingText _ = error "Cannot extract markdown heading text"
 
-getHeadingsFromMarkdown' :: ConduitT ByteString o (ResourceT IO) ()
-getHeadingsFromMarkdown' = decodeUtf8C .| toBlocks defaultMarkdownSettings .| filterHeadingText .| mapM_C (lift . print)
+getHeadingsFromMarkdown' :: ConduitT ByteString Text (ResourceT IO) ()
+getHeadingsFromMarkdown' = decodeUtf8C .| toBlocks defaultMarkdownSettings .| filterHeadingText
   where
     filterHeadingText :: Monad m => ConduitT (Block Text) Text m ()
     filterHeadingText = do
