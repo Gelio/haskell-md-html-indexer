@@ -14,20 +14,22 @@ import Data.XML.Types
 import Data.List (isPrefixOf)
 import Data.Text (unpack, Text)
 import Data.Maybe (maybe)
+import Text.Markdown (defaultMarkdownSettings)
+import qualified Text.Markdown.Block as MD
 import qualified Data.ByteString.Char8 as BS
 
 search :: SearchOptions -> FilePath -> IO ()
 search _ _ = putStrLn "Search"
 
-getHeadersFromHTML :: ConduitT BS.ByteString o (ResourceT IO) ()
-getHeadersFromHTML = eventConduit .| filterHeaders .| mapC getHeaderText .| mapM_C (lift . print)
+getHeadingsFromHTML :: ConduitT BS.ByteString o (ResourceT IO) ()
+getHeadingsFromHTML = eventConduit .| filterHeaders .| mapC getHeadingText .| mapM_C (lift . print)
   where
-    filterHeaders = dropWhileC (not . isEventBeginHeader) >> headC >>= maybe (return ()) (const $ takeWhileC (not . isEventEndHeader) >> filterHeaders)
+    filterHeaders = dropWhileC (not . isEventBeginHeading) >> headC >>= maybe (return ()) (const $ takeWhileC (not . isEventEndHeading) >> filterHeaders)
 
-    getHeaderText :: Event -> Text
-    getHeaderText (EventContent (ContentText x)) = x
-    getHeaderText (EventContent (ContentEntity x)) = x
-    getHeaderText _ = error "Cannot extract header text"
+    getHeadingText :: Event -> Text
+    getHeadingText (EventContent (ContentText x)) = x
+    getHeadingText (EventContent (ContentEntity x)) = x
+    getHeadingText _ = error "Cannot extract HTML heading text"
 
     isEventBeginElement :: Event -> Bool
     isEventBeginElement (EventBeginElement _ _) = True
@@ -41,18 +43,27 @@ getHeadersFromHTML = eventConduit .| filterHeaders .| mapC getHeaderText .| mapM
     isEventContent (EventContent _) = True
     isEventContent _ = False
 
-    isElementHeader :: Name -> Bool
-    isElementHeader (Name name _ _) = unpack name `elem` ["h1", "h2", "h3", "h4", "h5", "h6"]
+    isElementHeading :: Name -> Bool
+    isElementHeading (Name name _ _) = unpack name `elem` ["h1", "h2", "h3", "h4", "h5", "h6"]
 
-    isEventBeginHeader :: Event -> Bool
-    isEventBeginHeader (EventBeginElement (Name name _ _) _) = unpack name `elem` ["h1", "h2", "h3", "h4", "h5", "h6"]
-    isEventBeginHeader _ = False
+    isEventBeginHeading :: Event -> Bool
+    isEventBeginHeading (EventBeginElement (Name name _ _) _) = unpack name `elem` ["h1", "h2", "h3", "h4", "h5", "h6"]
+    isEventBeginHeading _ = False
 
-    isEventEndHeader :: Event -> Bool
-    isEventEndHeader (EventEndElement (Name name _ _)) = unpack name `elem` ["h1", "h2", "h3", "h4", "h5", "h6"]
-    isEventEndHeader _ = False
+    isEventEndHeading :: Event -> Bool
+    isEventEndHeading (EventEndElement (Name name _ _)) = unpack name `elem` ["h1", "h2", "h3", "h4", "h5", "h6"]
+    isEventEndHeading _ = False
 
+getHeadingsFromMarkdown :: ConduitT BS.ByteString o (ResourceT IO) ()
+getHeadingsFromMarkdown = decodeUtf8C .| MD.toBlocks defaultMarkdownSettings .| filterC isHeading .| mapC getHeadingText .| mapM_C (lift . print)
+  where
+    isHeading :: MD.Block Text -> Bool
+    isHeading (MD.BlockHeading _ _) = True
+    isHeading _ = False
 
+    getHeadingText :: MD.Block Text -> Text
+    getHeadingText (MD.BlockHeading _ text) = text
+    getHeadingText _ = error "Cannot extract markdown heading text"
 
 getSource :: (PrimMonad m, MonadResource m, MonadThrow m) => String -> ConduitT i BS.ByteString m ()
 getSource s
