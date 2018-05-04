@@ -19,10 +19,10 @@ data SearchOptions = SearchOptions { argPhrase :: String, optExec :: String } de
 searchOptions :: Parser SearchOptions
 searchOptions = helper <*> (SearchOptions <$> searchPhraseArgument <*> execOption)
 
-resourceArguments :: Parser [FilePath]
+resourceArguments :: Parser [String]
 resourceArguments = some $ argument str (metavar "RESOURCES..." <> help "Paths or URLs to Markdown or HTML files")
 
-newtype IndexOptions = IndexOptions { argResources :: [FilePath] } deriving (Show)
+newtype IndexOptions = IndexOptions { argResources :: [String] } deriving (Show)
 
 indexOptions :: Parser IndexOptions
 indexOptions = helper <*> (IndexOptions <$> resourceArguments)
