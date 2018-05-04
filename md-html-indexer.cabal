@@ -18,3 +18,4 @@ executable md-html-indexer
   main-is:             Main.hs
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5, conduit, conduit-extra, optparse-applicative, http-conduit, html-conduit, bytestring, transformers, xml-types, text, markdown, filepath, process, containers
+  other-modules:       HeadingExtract, HeadingExtract.File, HeadingExtract.Internal.HTML, HeadingExtract.Internal.Markdown, HeadingExtract.Network, Index, IndexerOptions, Search, Types
