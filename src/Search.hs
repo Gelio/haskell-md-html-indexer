@@ -38,6 +38,7 @@ displayMatches matches =
 displayMatch :: IndexMatch -> IO ()
 displayMatch (p, h) = putStrLn $ unpack p ++ ": " ++ unpack h
 
+-- TODO: possible concurrent execution
 execMatches :: String -> [IndexMatch] -> IO ()
 execMatches cmd matches = mapM_ (execCmd $ pack cmd) paths
   where

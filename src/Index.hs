@@ -12,6 +12,7 @@ import           IndexerOptions (IndexOptions (..))
 import           Types
 
 -- TODO: append to index (as option)
+-- TODO: index each file concurrently
 index :: IndexOptions -> FilePath -> IO ()
 index (IndexOptions rs) output = do
   withFile output WriteMode (\h -> mapM_ (indexResource h) rs)
