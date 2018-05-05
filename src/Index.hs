@@ -9,7 +9,6 @@ import           System.IO
 
 import           HeadingExtract
 import           IndexerOptions (IndexOptions (..))
-import           Types
 
 -- TODO: append to index (as option)
 -- TODO: index each file concurrently
