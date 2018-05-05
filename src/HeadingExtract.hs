@@ -15,8 +15,11 @@ import           HeadingExtract.Network
 -- getResourceHeadings :: String -> ConduitT i Text (ResourceT IO) ()
 getResourceHeadings :: String -> ConduitT i Text (ResourceT IO) ()
 getResourceHeadings s
-  | "http://" `isPrefixOf` s = getNetworkHeadings s
+  | isNetworkResource s = getNetworkHeadings s
   | otherwise = getFileHeadings s
+
+isNetworkResource :: String -> Bool
+isNetworkResource s = any (`isPrefixOf` s) ["http://", "https://"]
 
 -- Why won't it work?
 -- getResourceHeadingsTrimmed :: (PrimMonad m, MonadResource m, MonadThrow m) => String -> ConduitT i Text m ()

@@ -6,7 +6,6 @@ module IndexerOptions
   , parseOptions
   ) where
 
-import           Control.Monad
 import           Data.Semigroup      ((<>))
 import           Options.Applicative
 

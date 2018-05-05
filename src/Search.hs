@@ -4,7 +4,7 @@ module Search
 
 import           Conduit
 import qualified Data.Set       as Set
-import           Data.Text      (Text, pack, replace, unpack)
+import           Data.Text      (pack, replace, unpack)
 import qualified Data.Text      as T
 import           System.Process (callCommand)
 
@@ -40,8 +40,9 @@ displayMatch (p, h) = putStrLn $ unpack p ++ ": " ++ unpack h
 
 -- TODO: possible concurrent execution
 execMatches :: String -> [IndexMatch] -> IO ()
-execMatches cmd matches = mapM_ (execCmd $ pack cmd) paths
+execMatches cmd matches = mapM_ execCmd paths
   where
     paths = Set.fromList $ fst <$> matches
-    execCmd :: Text -> ResourcePath -> IO ()
-    execCmd cmd path = callCommand $ unpack $ replace (pack "{}") path cmd
+    cmdT = pack cmd
+    execCmd :: ResourcePath -> IO ()
+    execCmd path = callCommand $ unpack $ replace (pack "{}") path cmdT
