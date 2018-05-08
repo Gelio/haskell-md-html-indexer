@@ -12,11 +12,15 @@ import           System.FilePath.Posix            (splitExtension)
 import           HeadingExtract.Internal.HTML
 import           HeadingExtract.Internal.Markdown
 
-getFileHeadings :: (MonadResource m, PrimMonad m, MonadThrow m) => FilePath -> ConduitT i Text m ()
+getFileHeadings ::
+     (MonadResource m, PrimMonad m, MonadThrow m)
+  => FilePath
+  -> ConduitT i Text m ()
 getFileHeadings s = getFileHeadings' s s (mapC id)
 
-getFileHeadings' :: (MonadResource m, PrimMonad m, MonadThrow m) =>
-     FilePath
+getFileHeadings' ::
+     (MonadResource m, PrimMonad m, MonadThrow m)
+  => FilePath
   -> String
   -> ConduitT ByteString ByteString m ()
   -> ConduitT i Text m ()
