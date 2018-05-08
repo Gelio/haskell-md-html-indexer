@@ -6,16 +6,16 @@ import           Conduit
 import           Data.ByteString.Char8            (ByteString)
 import           Data.Char                        (toLower)
 import           Data.Conduit.Zlib                (ungzip)
-import           Data.Text                        (Text)
 import           System.FilePath.Posix            (splitExtension)
 
 import           HeadingExtract.Internal.HTML
 import           HeadingExtract.Internal.Markdown
+import           Types
 
 getFileHeadings ::
      (MonadResource m, PrimMonad m, MonadThrow m)
   => FilePath
-  -> ConduitT i Text m ()
+  -> ConduitT i Heading m ()
 getFileHeadings s = getFileHeadings' s s (mapC id)
 
 getFileHeadings' ::
@@ -23,7 +23,7 @@ getFileHeadings' ::
   => FilePath
   -> String
   -> ConduitT ByteString ByteString m ()
-  -> ConduitT i Text m ()
+  -> ConduitT i Heading m ()
 getFileHeadings' fullPath s c
   | ext' == ".gz" = getFileHeadings' fullPath rest (c .| ungzip)
   | ext' `elem` [".html", ".htm"] =

@@ -3,6 +3,7 @@ module Search
   ) where
 
 import           Conduit
+import           Control.Arrow  (second)
 import qualified Data.Set       as Set
 import           Data.Text      (pack, replace, unpack)
 import qualified Data.Text      as T
@@ -24,7 +25,7 @@ readIndexFile ::
 readIndexFile path =
   sourceFile path .| decodeUtf8C .| linesUnboundedC .|
   mapC (T.break (== '\ETB')) .|
-  mapC (Control.Arrow.second T.tail)
+  mapC (second T.tail)
 
 filterIndex :: MonadResource m => String -> ConduitT IndexMatch IndexMatch m ()
 filterIndex phrase = filterC ((phraseT `T.isInfixOf`) . snd)

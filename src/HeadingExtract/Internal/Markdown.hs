@@ -9,8 +9,10 @@ import           Data.Text             (Text)
 import           Text.Markdown         (defaultMarkdownSettings)
 import           Text.Markdown.Block
 
+import           Types
+
 getHeadingsFromMarkdown ::
-     (MonadResource m, MonadThrow m) => ConduitT ByteString Text m ()
+     (MonadResource m, MonadThrow m) => ConduitT ByteString Heading m ()
 getHeadingsFromMarkdown =
   decodeUtf8C .| toBlocks defaultMarkdownSettings .| filterC isHeading .|
   mapC getHeadingText
@@ -23,7 +25,7 @@ getHeadingsFromMarkdown =
     getHeadingText _ = error "Cannot extract markdown heading text"
 
 getHeadingsFromMarkdown' ::
-     (MonadResource m, MonadThrow m) => ConduitT ByteString Text m ()
+     (MonadResource m, MonadThrow m) => ConduitT ByteString Heading m ()
 getHeadingsFromMarkdown' =
   decodeUtf8C .| toBlocks defaultMarkdownSettings .| filterHeadingText
   where

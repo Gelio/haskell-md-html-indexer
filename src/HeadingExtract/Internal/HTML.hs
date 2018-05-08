@@ -4,14 +4,16 @@ module HeadingExtract.Internal.HTML
 
 import           Conduit
 import           Data.ByteString.Char8 (ByteString)
-import           Data.Text             (Text, unpack)
+import           Data.Text             (unpack)
 import           Data.XML.Types
 import           Text.HTML.DOM
 
-getHeadingsFromHTML :: MonadResource m => ConduitT ByteString Text m ()
+import           Types
+
+getHeadingsFromHTML :: MonadResource m => ConduitT ByteString Heading m ()
 getHeadingsFromHTML = eventConduit .| filterHeadings .| getHeadingText
 
-getHeadingText :: Monad m => ConduitT Event Text m ()
+getHeadingText :: Monad m => ConduitT Event Heading m ()
 getHeadingText = do
   mx <- await
   case mx of
