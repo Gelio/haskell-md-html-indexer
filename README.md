@@ -15,4 +15,16 @@ stack exec md-html-indexer search Server
 stack exec md-html-indexer -- search headings -e "ls -al {}"
 ```
 
+## Formatting
+
+```bash
+hfmt src -w
+```
+
+## Linting
+
+```bash
+hlint src
+```
+
 ## example headings
