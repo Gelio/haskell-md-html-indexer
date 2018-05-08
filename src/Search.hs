@@ -19,13 +19,13 @@ search (SearchOptions phrase cmd) input = do
     then displayMatches matches
     else execMatches cmd matches
 
-readIndexFile :: FilePath -> ConduitT i IndexMatch (ResourceT IO) ()
+readIndexFile :: (MonadResource m, MonadThrow m) => FilePath -> ConduitT i IndexMatch m ()
 readIndexFile path =
   sourceFile path .| decodeUtf8C .| linesUnboundedC .|
   mapC (T.break (== '\ETB')) .|
   mapC (\(res, headingWithETB) -> (res, T.tail headingWithETB))
 
-filterIndex :: String -> ConduitT IndexMatch IndexMatch (ResourceT IO) ()
+filterIndex :: MonadResource m => String -> ConduitT IndexMatch IndexMatch m ()
 filterIndex phrase = filterC ((phraseT `T.isInfixOf`) . snd)
   where
     phraseT = pack phrase

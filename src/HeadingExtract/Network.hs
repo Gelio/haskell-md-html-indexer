@@ -3,14 +3,12 @@ module HeadingExtract.Network
   ) where
 
 import           Conduit
-import           Data.ByteString.Char8        (ByteString)
 import           Data.Text                    (Text)
 import           Network.HTTP.Simple
 
 import           HeadingExtract.Internal.HTML
 
 -- Why won't it work?
--- getNetworkHeadings :: (MonadResource m, MonadThrow m) => String -> ConduitT i Text m ()
-getNetworkHeadings :: String -> ConduitT i Text (ResourceT IO) ()
+getNetworkHeadings :: (MonadResource m, MonadThrow m) => String -> ConduitT i Text m ()
 getNetworkHeadings s =
   (parseRequest s >>= flip httpSource getResponseBody) .| getHeadingsFromHTML
