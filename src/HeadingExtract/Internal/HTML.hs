@@ -8,7 +8,8 @@ import           Data.Text             (Text, unpack)
 import           Data.XML.Types
 import           Text.HTML.DOM
 
-getHeadingsFromHTML :: ConduitT ByteString Text (ResourceT IO) ()
+-- getHeadingsFromHTML :: ConduitT ByteString Text (ResourceT IO) ()
+getHeadingsFromHTML :: MonadResource m => ConduitT ByteString Text m ()
 getHeadingsFromHTML = eventConduit .| filterHeadings .| getHeadingText
 
 getHeadingText :: Monad m => ConduitT Event Text m ()
