@@ -6,6 +6,7 @@ import           Conduit
 import           Data.Text      (Text, pack, singleton)
 import qualified Data.Text      as T
 import           System.IO
+import qualified Control.Exception as X
 
 import           HeadingExtract
 import           IndexerOptions (IndexOptions (..))
@@ -14,8 +15,14 @@ import           IndexerOptions (IndexOptions (..))
 -- TODO: index each file concurrently
 index :: IndexOptions -> FilePath -> IO ()
 index (IndexOptions rs) output = do
-  withFile output WriteMode (\h -> mapM_ (indexResource h) rs)
+  withFile output WriteMode (\h -> mapM_ (safeIndexResource h) rs)
   putStrLn $ "Updated index at " ++ output
+
+safeIndexResource :: Handle -> String -> IO ()
+safeIndexResource h resource = X.handle errorHandler $ indexResource h resource
+  where
+    errorHandler :: X.SomeException -> IO ()
+    errorHandler e = putStrLn $ "Cannot index resource " ++ resource ++ ": " ++ show e
 
 indexResource :: Handle -> String -> IO ()
 indexResource handle resource =
