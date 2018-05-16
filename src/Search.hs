@@ -53,4 +53,8 @@ execMatches cmd matches = mapM_ execCmd paths
     paths = Set.fromList $ fst <$> matches
     cmdT = pack cmd
     execCmd :: ResourcePath -> IO ()
-    execCmd path = callCommand $ unpack $ replace (pack "{}") path cmdT
+    execCmd path = catch (callCommand $ unpack $ replace (pack "{}") path cmdT) handler
+      where
+        handler :: SomeException -> IO ()
+        handler _ = putStrLn ("Cannot execute command on " ++ unpack path) >> putStrLn ""
+        -- The actual error will be printed on the line above due to how callCommand works
