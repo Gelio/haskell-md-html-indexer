@@ -11,6 +11,7 @@ import           System.FilePath.Posix            (splitExtension)
 import           HeadingExtract.Internal.HTML
 import           HeadingExtract.Internal.Markdown
 import           Types
+import HeadingExtract.Exception (UnknownExtensionException(..))
 
 getFileHeadings ::
      (MonadResource m, PrimMonad m, MonadThrow m)
@@ -29,7 +30,7 @@ getFileHeadings' fullPath s c
   | ext' `elem` [".html", ".htm"] =
     sourceFile fullPath .| c .| getHeadingsFromHTML
   | ext' == ".md" = sourceFile fullPath .| c .| getHeadingsFromMarkdown
-  | otherwise = error "Unknown extension"
+  | otherwise = throwM $ UnknownExtensionException ext'
   where
     (rest, ext) = splitExtension s
     ext' = toLower <$> ext
