@@ -6,9 +6,9 @@ import           Conduit
 import           Data.Text      (Text, pack, singleton)
 import qualified Data.Text      as T
 import           System.IO
-import qualified Control.Exception as X
 
 import           HeadingExtract
+import Exception (handleIOError)
 import           IndexerOptions (IndexOptions (..))
 
 -- TODO: append to index (as option)
@@ -19,10 +19,9 @@ index (IndexOptions rs) output = do
   putStrLn $ "Updated index at " ++ output
 
 safeIndexResource :: Handle -> String -> IO ()
-safeIndexResource h resource = X.handle errorHandler $ indexResource h resource
+safeIndexResource h resource = handleIOError msg $ indexResource h resource
   where
-    errorHandler :: X.SomeException -> IO ()
-    errorHandler e = putStrLn $ "Cannot index resource " ++ resource ++ ": " ++ show e
+    msg = "Cannot index resource " ++ resource
 
 indexResource :: Handle -> String -> IO ()
 indexResource handle resource =

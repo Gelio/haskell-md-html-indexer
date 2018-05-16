@@ -42,6 +42,7 @@ executable md-html-indexer
     , Search
     , Types
     , HeadingExtract.Exception
+    , Exception
 
 
 
