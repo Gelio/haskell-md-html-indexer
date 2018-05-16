@@ -12,13 +12,19 @@ import           System.Process (callCommand)
 import           IndexerOptions
 import           Types
 
+import Control.Exception (catch, SomeException)
+
 search :: SearchOptions -> FilePath -> IO ()
-search (SearchOptions phrase cmd) input = do
+search (SearchOptions phrase cmd) input = catch (do
   matches <-
     runConduitRes $ readIndexFile input .| filterIndex phrase .| sinkList
   if null cmd
     then displayMatches matches
     else execMatches cmd matches
+  ) handler
+  where
+    handler :: SomeException -> IO ()
+    handler e = putStrLn $ "Cannot search the index file: " ++ show e
 
 readIndexFile ::
      (MonadResource m, MonadThrow m) => FilePath -> ConduitT i IndexMatch m ()
