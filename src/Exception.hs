@@ -1,10 +1,13 @@
-module Exception (handleIOError) where
+module Exception
+  ( handleIOError
+  ) where
 
-import Control.Exception as X
-import System.IO.Error
+import           Control.Exception as X
+import           System.IO.Error
 
 handleIOError :: String -> IO () -> IO ()
-handleIOError msg action = X.handle (anyErrorHandler msg) $ X.handle (ioErrorHandler msg) action
+handleIOError msg action =
+  X.handle (anyErrorHandler msg) $ X.handle (ioErrorHandler msg) action
 
 anyErrorHandler :: String -> X.SomeException -> IO ()
 anyErrorHandler msg e = putStrLn $ msg ++ ": " ++ show e

@@ -7,8 +7,8 @@ import           Data.Text      (Text, pack, singleton)
 import qualified Data.Text      as T
 import           System.IO
 
+import           Exception      (handleIOError)
 import           HeadingExtract
-import Exception (handleIOError)
 import           IndexerOptions (IndexOptions (..))
 
 -- TODO: append to index (as option)

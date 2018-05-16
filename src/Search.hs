@@ -3,25 +3,26 @@ module Search
   ) where
 
 import           Conduit
-import           Control.Arrow  (second)
-import qualified Data.Set       as Set
-import           Data.Text      (pack, replace, unpack)
-import qualified Data.Text      as T
-import           System.Process (callCommand)
+import           Control.Arrow     (second)
+import qualified Data.Set          as Set
+import           Data.Text         (pack, replace, unpack)
+import qualified Data.Text         as T
+import           System.Process    (callCommand)
 
 import           IndexerOptions
 import           Types
 
-import Control.Exception (catch, SomeException)
+import           Control.Exception (SomeException, catch)
 
 search :: SearchOptions -> FilePath -> IO ()
-search (SearchOptions phrase cmd) input = catch (do
-  matches <-
-    runConduitRes $ readIndexFile input .| filterIndex phrase .| sinkList
-  if null cmd
-    then displayMatches matches
-    else execMatches cmd matches
-  ) handler
+search (SearchOptions phrase cmd) input =
+  catch
+    (do matches <-
+          runConduitRes $ readIndexFile input .| filterIndex phrase .| sinkList
+        if null cmd
+          then displayMatches matches
+          else execMatches cmd matches)
+    handler
   where
     handler :: SomeException -> IO ()
     handler e = putStrLn $ "Cannot search the index file: " ++ show e
@@ -53,8 +54,10 @@ execMatches cmd matches = mapM_ execCmd paths
     paths = Set.fromList $ fst <$> matches
     cmdT = pack cmd
     execCmd :: ResourcePath -> IO ()
-    execCmd path = catch (callCommand $ unpack $ replace (pack "{}") path cmdT) handler
+    execCmd path =
+      catch (callCommand $ unpack $ replace (pack "{}") path cmdT) handler
       where
         handler :: SomeException -> IO ()
-        handler _ = putStrLn ("Cannot execute command on " ++ unpack path) >> putStrLn ""
+        handler _ =
+          putStrLn ("Cannot execute command on " ++ unpack path) >> putStrLn ""
         -- The actual error will be printed on the line above due to how callCommand works

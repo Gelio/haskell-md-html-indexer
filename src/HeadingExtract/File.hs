@@ -8,10 +8,10 @@ import           Data.Char                        (toLower)
 import           Data.Conduit.Zlib                (ungzip)
 import           System.FilePath.Posix            (splitExtension)
 
+import           HeadingExtract.Exception         (UnknownExtensionException (..))
 import           HeadingExtract.Internal.HTML
 import           HeadingExtract.Internal.Markdown
 import           Types
-import HeadingExtract.Exception (UnknownExtensionException(..))
 
 getFileHeadings ::
      (MonadResource m, PrimMonad m, MonadThrow m)

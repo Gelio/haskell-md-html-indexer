@@ -1,8 +1,11 @@
-module HeadingExtract.Exception (UnknownExtensionException(..)) where
+module HeadingExtract.Exception
+  ( UnknownExtensionException(..)
+  ) where
 
-import Control.Exception (Exception)
+import           Control.Exception (Exception)
 
-newtype UnknownExtensionException = UnknownExtensionException String
+newtype UnknownExtensionException =
+  UnknownExtensionException String
 
 instance Show UnknownExtensionException where
   show (UnknownExtensionException ext) = "Unknown extension " ++ ext
