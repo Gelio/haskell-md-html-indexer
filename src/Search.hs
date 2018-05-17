@@ -11,6 +11,7 @@ import           System.Process    (callCommand)
 
 import           IndexerOptions
 import           Types
+import           Concurrent (mapConcurrently)
 
 import           Control.Exception (SomeException, catch)
 
@@ -32,7 +33,12 @@ readIndexFile ::
 readIndexFile path =
   sourceFile path .| decodeUtf8C .| linesUnboundedC .|
   mapC (T.break (== '\ETB')) .|
-  mapC (second T.tail)
+  mapC (second mapHeading)
+  where
+    mapHeading :: Heading -> Heading
+    mapHeading h
+      | T.null h = h
+      | otherwise = T.tail h
 
 filterIndex :: MonadResource m => String -> ConduitT IndexMatch IndexMatch m ()
 filterIndex phrase = filterC ((phraseT `T.isInfixOf`) . snd)
@@ -47,9 +53,8 @@ displayMatches matches =
 displayMatch :: IndexMatch -> IO ()
 displayMatch (p, h) = putStrLn $ unpack p ++ ": " ++ unpack h
 
--- TODO: possible concurrent execution
 execMatches :: String -> [IndexMatch] -> IO ()
-execMatches cmd matches = mapM_ execCmd paths
+execMatches cmd matches = mapConcurrently execCmd paths
   where
     paths = Set.fromList $ fst <$> matches
     cmdT = pack cmd

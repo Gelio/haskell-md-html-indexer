@@ -8,11 +8,12 @@ import           Control.Concurrent.MVar (MVar, newEmptyMVar, newMVar, putMVar,
 import           System.IO.Unsafe        (unsafePerformIO)
 
 -- Adapted from http://hackage.haskell.org/package/base-4.11.1.0/docs/Control-Concurrent.html#g:12
-mapConcurrently :: (a -> IO ()) -> [a] -> IO ()
+mapConcurrently :: Foldable t => (a -> IO ()) -> t a -> IO ()
 mapConcurrently f list = mapM_ (forkChild . f) list >> waitForChildren
   where
     children :: MVar [MVar ()]
     children = unsafePerformIO (newMVar [])
+
     waitForChildren :: IO ()
     waitForChildren = do
       cs <- takeMVar children
@@ -22,6 +23,7 @@ mapConcurrently f list = mapM_ (forkChild . f) list >> waitForChildren
           putMVar children ms
           takeMVar m
           waitForChildren
+
     forkChild :: IO () -> IO ThreadId
     forkChild io = do
       mvar <- newEmptyMVar
