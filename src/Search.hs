@@ -9,9 +9,9 @@ import           Data.Text         (pack, replace, unpack)
 import qualified Data.Text         as T
 import           System.Process    (callCommand)
 
+import           Concurrent        (mapConcurrently)
 import           IndexerOptions
 import           Types
-import           Concurrent (mapConcurrently)
 
 import           Control.Exception (SomeException, catch)
 

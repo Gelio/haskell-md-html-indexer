@@ -13,7 +13,6 @@ mapConcurrently f list = mapM_ (forkChild . f) list >> waitForChildren
   where
     children :: MVar [MVar ()]
     children = unsafePerformIO (newMVar [])
-
     waitForChildren :: IO ()
     waitForChildren = do
       cs <- takeMVar children
@@ -23,7 +22,6 @@ mapConcurrently f list = mapM_ (forkChild . f) list >> waitForChildren
           putMVar children ms
           takeMVar m
           waitForChildren
-
     forkChild :: IO () -> IO ThreadId
     forkChild io = do
       mvar <- newEmptyMVar
