@@ -42,5 +42,5 @@ stack exec md-html-indexer -- index https://stackoverflow.com/questions/857653/g
 The last two pages should be indexed (almost) immediately.
 
 ```bash
-stack exec md-html-indexer -- index https://en.wikipedia.org/wiki/Bandwidth_throttling https://httpstat.us/200?sleep=10000  https://developers.google.com/search/docs/guides/enhance-site
+stack exec md-html-indexer -- index https://en.wikipedia.org/wiki/Bandwidth_throttling https://httpstat.us/200?sleep=10000  https://developers.google.com/search/docs/guides/enhance-site https://httpstat.us/200?sleep=1000
 ```

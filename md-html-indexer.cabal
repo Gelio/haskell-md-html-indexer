@@ -43,6 +43,7 @@ executable md-html-indexer
     , Types
     , HeadingExtract.Exception
     , Exception
+    , Concurrent
 
 
 
