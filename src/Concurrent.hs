@@ -1,16 +1,18 @@
-module Concurrent (mapConcurrently) where
+module Concurrent
+  ( mapConcurrently
+  ) where
 
-import           System.IO.Unsafe (unsafePerformIO)
-import Control.Concurrent (forkOS, ThreadId)
-import Control.Concurrent.MVar (takeMVar, putMVar, newEmptyMVar, newMVar, MVar)
+import           Control.Concurrent      (ThreadId, forkOS)
+import           Control.Concurrent.MVar (MVar, newEmptyMVar, newMVar, putMVar,
+                                          takeMVar)
+import           System.IO.Unsafe        (unsafePerformIO)
 
+-- Adapted from http://hackage.haskell.org/package/base-4.11.1.0/docs/Control-Concurrent.html#g:12
 mapConcurrently :: (a -> IO ()) -> [a] -> IO ()
 mapConcurrently f list = mapM_ (forkChild . f) list >> waitForChildren
   where
-    -- Adapted from http://hackage.haskell.org/package/base-4.11.1.0/docs/Control-Concurrent.html#g:12
     children :: MVar [MVar ()]
     children = unsafePerformIO (newMVar [])
-
     waitForChildren :: IO ()
     waitForChildren = do
       cs <- takeMVar children
@@ -20,10 +22,9 @@ mapConcurrently f list = mapM_ (forkChild . f) list >> waitForChildren
           putMVar children ms
           takeMVar m
           waitForChildren
-
     forkChild :: IO () -> IO ThreadId
     forkChild io = do
       mvar <- newEmptyMVar
       childs <- takeMVar children
-      putMVar children (mvar:childs)
+      putMVar children (mvar : childs)
       forkOS (io >> putMVar mvar ())

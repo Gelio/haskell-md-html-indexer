@@ -3,12 +3,12 @@ module Index
   ) where
 
 import           Conduit
+import           Control.Monad  (when)
 import           Data.Text      (Text, pack, singleton)
 import qualified Data.Text      as T
 import           System.IO
-import Control.Monad (when)
 
-import Concurrent (mapConcurrently)
+import           Concurrent     (mapConcurrently)
 import           Exception      (handleIOError)
 import           HeadingExtract
 import           IndexerOptions (IndexOptions (..))
@@ -28,9 +28,12 @@ safeIndexResource h resource = handleIOError msg $ indexResource h resource
     msg = "Cannot index resource " ++ resource
 
 indexResource :: Handle -> String -> IO ()
-indexResource handle resource = runConduitRes indexingConduit >> when flushIndexedResults (hFlush handle) >> putStrLn ("Finished indexing " ++ resource)
+indexResource handle resource =
+  runConduitRes indexingConduit >> when flushIndexedResults (hFlush handle) >>
+  putStrLn ("Finished indexing " ++ resource)
   where
-    indexingConduit = getResourceHeadingsTrimmed resource .|
+    indexingConduit =
+      getResourceHeadingsTrimmed resource .|
       mapC (insertResourcePath $ pack resource) .|
       unlinesC .|
       encodeUtf8C .|
