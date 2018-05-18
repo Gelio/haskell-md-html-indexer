@@ -25,6 +25,7 @@ htmlTests =
     , testHTMLInsideHeading
     , testUnclosedHeading
     , testHeadingInsideOtherTags
+    , testHeadingCase
     ]
 
 possibleHeadings :: [String]
@@ -72,3 +73,11 @@ testHeadingInsideOtherTags =
     (assertEqual "should index headings inside other tags" ["heading"] $
      getHeadingsFromHTML'
        "<html><head></head><body><main><h1>heading</h1></main></body></html>")
+
+testHeadingCase :: Test
+testHeadingCase =
+  TestCase
+    (assertEqual
+       "should index headings regardless of the character case"
+       ["heading", "heading2", "heading3"] $
+     getHeadingsFromHTML' "<H1>heading</h1><h2>heading2</H2><H3>heading3</H3>")
