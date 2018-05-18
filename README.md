@@ -1,5 +1,11 @@
 # md-html-indexer
 
+This project is split into 3 parts:
+
+* library
+* executable
+* tests
+
 ## Building
 
 ```bash
@@ -18,13 +24,19 @@ stack exec md-html-indexer -- search headings -e "ls -al {}"
 ## Formatting
 
 ```bash
-hfmt src -w
+hfmt executable library tests -w
 ```
 
 ## Linting
 
 ```bash
-hlint src
+hlint executable library tests
+```
+
+## Running tests
+
+```bash
+stack test
 ```
 
 ## Example commands to test for concurrency
