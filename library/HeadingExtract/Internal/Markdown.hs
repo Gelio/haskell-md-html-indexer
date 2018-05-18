@@ -11,8 +11,6 @@ import           Text.Markdown.Block
 
 import           HeadingExtract.Types
 
--- These functions are equivalent, just written using different syntax
-
 -- |Parses a Markdown stream and yields the headings.
 -- This function is equivalent to 'getHeadingsFromMarkdown'',
 -- only the implementation is different.

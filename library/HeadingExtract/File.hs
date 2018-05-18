@@ -16,16 +16,16 @@ import           HeadingExtract.Types
 -- |Gets the headings from a file. Handles gzipped Markdown and html files.
 getFileHeadings ::
      (MonadResource m, PrimMonad m, MonadThrow m)
-  => FilePath   -- ^ Path to the file
+  => FilePath -- ^ Path to the file
   -> ConduitT i Heading m ()
 getFileHeadings s = getFileHeadings' s s (mapC id)
 
 -- |Used internally to construct the proper conduits to read and parse the file.
 getFileHeadings' ::
      (MonadResource m, PrimMonad m, MonadThrow m)
-  => FilePath  -- ^ Full file path
-  -> String   -- ^ Leftover file path. Further execution depends on this path's extension
-  -> ConduitT ByteString ByteString m ()  -- ^ The parsing conduit constructed so far
+  => FilePath -- ^ Full file path
+  -> String -- ^ Leftover file path. Further execution depends on this path's extension
+  -> ConduitT ByteString ByteString m () -- ^ The parsing conduit constructed so far
   -> ConduitT i Heading m ()
 getFileHeadings' fullPath s c
   | ext' == ".gz" = getFileHeadings' fullPath rest (c .| ungzip)
