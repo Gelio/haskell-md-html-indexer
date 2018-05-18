@@ -11,10 +11,10 @@ import           Text.Markdown.Block
 
 import           HeadingExtract.Types
 
-getHeadingsFromMarkdown ::
-     (MonadResource m, MonadThrow m) => ConduitT ByteString Heading m ()
+-- These functions are equivalent, just written using different syntax
+getHeadingsFromMarkdown :: Monad m => ConduitT ByteString Heading m ()
 getHeadingsFromMarkdown =
-  decodeUtf8C .| toBlocks defaultMarkdownSettings .| filterC isHeading .|
+  decodeUtf8LenientC .| toBlocks defaultMarkdownSettings .| filterC isHeading .|
   mapC getHeadingText
   where
     isHeading :: Block Text -> Bool
@@ -24,10 +24,9 @@ getHeadingsFromMarkdown =
     getHeadingText (BlockHeading _ text) = text
     getHeadingText _ = error "Cannot extract markdown heading text"
 
-getHeadingsFromMarkdown' ::
-     (MonadResource m, MonadThrow m) => ConduitT ByteString Heading m ()
+getHeadingsFromMarkdown' :: Monad m => ConduitT ByteString Heading m ()
 getHeadingsFromMarkdown' =
-  decodeUtf8C .| toBlocks defaultMarkdownSettings .| filterHeadingText
+  decodeUtf8LenientC .| toBlocks defaultMarkdownSettings .| filterHeadingText
   where
     filterHeadingText :: Monad m => ConduitT (Block Text) Text m ()
     filterHeadingText = do

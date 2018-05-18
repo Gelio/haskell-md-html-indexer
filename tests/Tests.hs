@@ -7,10 +7,11 @@ import           System.Exit
 
 import           Test.HUnit
 
-import           Test.HeadingExtract.Internal.HTML (htmlTests)
+import           Test.HeadingExtract.Internal.HTML     (htmlTests)
+import           Test.HeadingExtract.Internal.Markdown (markdownTests)
 
 tests :: Test
-tests = TestList [htmlTests]
+tests = TestList [htmlTests, markdownTests]
 
 main :: IO ()
 main = do
