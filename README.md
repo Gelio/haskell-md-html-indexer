@@ -39,6 +39,20 @@ hlint executable library tests
 stack test
 ```
 
+## Generate documentation
+
+```bash
+stack haddock
+```
+
+Alternatively:
+
+```bash
+cabal configure --package-db=clear --package-db=global --package-db=$(stack path --snapshot-pkg-db) --package-db=$(stack path --local-pkg-db)
+
+cabal haddock --executables
+```
+
 ## Example commands to test for concurrency
 
 ### Test for indexing with not interleaved output
