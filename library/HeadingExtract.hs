@@ -13,17 +13,22 @@ import           HeadingExtract.File
 import           HeadingExtract.Network
 import           HeadingExtract.Types
 
+-- |Parses the resource and retrieves the headings. Handles HTML via network
+-- and HTML/Markdown (with gzip) from local filesystem.
 getResourceHeadings ::
      (MonadResource m, PrimMonad m, MonadThrow m)
-  => String
+  => String -- ^ Path to the resource
   -> ConduitT i Heading m ()
 getResourceHeadings s
   | isNetworkResource s = getNetworkHeadings s
   | otherwise = getFileHeadings s
 
+-- |Determines if the resource should be fetched from the Internet.
 isNetworkResource :: String -> Bool
 isNetworkResource s = any (`isPrefixOf` s) ["http://", "https://"]
 
+-- |Does the same as 'getResourceHeadings' but returns only not empty
+-- headings.
 getResourceHeadingsTrimmed ::
      (PrimMonad m, MonadResource m, MonadThrow m)
   => String

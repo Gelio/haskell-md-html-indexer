@@ -4,6 +4,7 @@ module HeadingExtract.Exception
 
 import           Control.Exception (Exception)
 
+-- |Exception used when the file has an unknown extension.
 newtype UnknownExtensionException =
   UnknownExtensionException String
 
