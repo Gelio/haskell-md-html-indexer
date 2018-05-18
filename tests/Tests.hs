@@ -4,12 +4,13 @@ module Main
   ) where
 
 import           System.Exit
+
 import           Test.HUnit
 
-import HeadingExtract.Internal.HTML
+import           Test.HeadingExtract.Internal.HTML (htmlTests)
 
 tests :: Test
-tests = TestList [test1]
+tests = TestList [htmlTests]
 
 main :: IO ()
 main = do

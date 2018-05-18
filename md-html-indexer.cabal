@@ -69,7 +69,12 @@ test-suite md-html-indexer-tests
     tests
   build-depends: base >= 4.7 && < 5
     , HUnit
+    , md-html-indexer
+    , conduit
+    , bytestring
+    , text
   other-modules:
+    Test.HeadingExtract.Internal.HTML
   ghc-options: -Wall
 
 
