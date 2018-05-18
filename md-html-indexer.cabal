@@ -76,6 +76,7 @@ test-suite md-html-indexer-tests
   other-modules:
     Test.HeadingExtract.Internal.HTML
     Test.HeadingExtract.Internal.Markdown
+    Test.HeadingExtract
   ghc-options: -Wall
 
 

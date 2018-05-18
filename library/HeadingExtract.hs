@@ -1,6 +1,7 @@
 module HeadingExtract
   ( getResourceHeadings
   , getResourceHeadingsTrimmed
+  , isNetworkResource
   ) where
 
 import           Conduit
