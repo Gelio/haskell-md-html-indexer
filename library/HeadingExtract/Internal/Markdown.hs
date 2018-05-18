@@ -9,7 +9,7 @@ import           Data.Text             (Text)
 import           Text.Markdown         (defaultMarkdownSettings)
 import           Text.Markdown.Block
 
-import           Types
+import           HeadingExtract.Types
 
 getHeadingsFromMarkdown ::
      (MonadResource m, MonadThrow m) => ConduitT ByteString Heading m ()

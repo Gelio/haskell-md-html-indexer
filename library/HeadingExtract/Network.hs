@@ -6,7 +6,7 @@ import           Conduit
 import           Network.HTTP.Simple
 
 import           HeadingExtract.Internal.HTML
-import           Types
+import           HeadingExtract.Types
 
 getNetworkHeadings ::
      (MonadResource m, MonadThrow m) => String -> ConduitT i Heading m ()

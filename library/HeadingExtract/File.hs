@@ -11,7 +11,7 @@ import           System.FilePath.Posix            (splitExtension)
 import           HeadingExtract.Exception         (UnknownExtensionException (..))
 import           HeadingExtract.Internal.HTML
 import           HeadingExtract.Internal.Markdown
-import           Types
+import           HeadingExtract.Types
 
 getFileHeadings ::
      (MonadResource m, PrimMonad m, MonadThrow m)

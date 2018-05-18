@@ -1,7 +1,9 @@
 name:                md-html-indexer
 version:             0.1.0.0
--- synopsis:
--- description:
+synopsis:            HTML and Markdown indexer
+description:         HTML and Markdown indexer. Supports indexing network and filesystem resources,
+                     as well as executing commands on found resources. Processes data as streams and
+                     runs concurrently.
 homepage:            https://github.com/Gelio/haskell-md-html-indexer#readme
 license:             BSD3
 license-file:        LICENSE
@@ -13,8 +15,34 @@ build-type:          Simple
 cabal-version:       >=1.10
 extra-source-files:  README.md
 
+library
+  hs-source-dirs:      library
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
+    , conduit
+    , conduit-extra
+    , http-conduit
+    , html-conduit
+    , bytestring
+    , transformers
+    , xml-types
+    , text
+    , markdown
+    , filepath
+    , containers
+  exposed-modules:
+    HeadingExtract
+    HeadingExtract.Types
+    HeadingExtract.Network
+    HeadingExtract.File
+    HeadingExtract.Exception
+    HeadingExtract.Internal.HTML
+    HeadingExtract.Internal.Markdown
+
+  ghc-options: -Wall
+
 executable md-html-indexer
-  hs-source-dirs:      src
+  hs-source-dirs:      executable
   main-is:             Main.hs
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
@@ -31,19 +59,14 @@ executable md-html-indexer
     , filepath
     , process
     , containers
+    , md-html-indexer
 
-  other-modules:       HeadingExtract
-    , HeadingExtract.File
-    , HeadingExtract.Internal.HTML
-    , HeadingExtract.Internal.Markdown
-    , HeadingExtract.Network
-    , Index
-    , IndexerOptions
-    , Search
-    , Types
-    , HeadingExtract.Exception
-    , Exception
-    , Concurrent
+  other-modules:
+    Index
+    IndexerOptions
+    Search
+    Exception
+    Concurrent
 
   ghc-options: -Wall -threaded
 

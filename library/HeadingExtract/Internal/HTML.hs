@@ -8,7 +8,7 @@ import           Data.Text             (unpack)
 import           Data.XML.Types
 import           Text.HTML.DOM
 
-import           Types
+import           HeadingExtract.Types
 
 getHeadingsFromHTML :: MonadResource m => ConduitT ByteString Heading m ()
 getHeadingsFromHTML = eventConduit .| filterHeadings .| getHeadingText

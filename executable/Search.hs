@@ -3,17 +3,17 @@ module Search
   ) where
 
 import           Conduit
-import           Control.Arrow     (second)
-import qualified Data.Set          as Set
-import           Data.Text         (pack, replace, unpack)
-import qualified Data.Text         as T
-import           System.Process    (callCommand)
+import           Control.Arrow        (second)
+import qualified Data.Set             as Set
+import           Data.Text            (pack, replace, unpack)
+import qualified Data.Text            as T
+import           System.Process       (callCommand)
 
-import           Concurrent        (mapConcurrently)
+import           Concurrent           (mapConcurrently)
+import           HeadingExtract.Types
 import           IndexerOptions
-import           Types
 
-import           Control.Exception (SomeException, catch)
+import           Control.Exception    (SomeException, catch)
 
 search :: SearchOptions -> FilePath -> IO ()
 search (SearchOptions phrase cmd) input =
