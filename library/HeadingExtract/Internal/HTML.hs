@@ -1,3 +1,9 @@
+{-|
+Module      : HeadingExtract.Internal.HTML
+Description : Extracts headings from HTML.
+
+Extracts headings from HTML.
+-}
 module HeadingExtract.Internal.HTML
   ( getHeadingsFromHTML
   ) where

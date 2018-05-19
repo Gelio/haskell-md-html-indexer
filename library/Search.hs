@@ -1,3 +1,9 @@
+{-|
+Module      : Search
+Description : Searches the index file for matches.
+
+Searches the index file for matches.
+-}
 module Search
   ( search
   ) where
@@ -15,7 +21,10 @@ import           IndexerOptions
 
 import           Control.Exception    (SomeException, catch)
 
-search :: SearchOptions -> FilePath -> IO ()
+-- |Searches the index file for matches.
+search :: SearchOptions -- ^The options used during searching.
+    -> FilePath -- ^The path to the index file.
+    -> IO ()
 search (SearchOptions phrase cmd) input =
   catch
     (do matches <-

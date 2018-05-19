@@ -1,3 +1,11 @@
+{-|
+Module      : HeadingExtract.Network
+Description : Retrieves the headings from the network.
+
+Retrieves the headings from the network.
+
+Assumes that every network resource is HTML.
+-}
 module HeadingExtract.Network
   ( getNetworkHeadings
   ) where

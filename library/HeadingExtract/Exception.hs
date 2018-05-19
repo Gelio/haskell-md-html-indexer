@@ -1,3 +1,9 @@
+{-|
+Module      : HeadingExtract.Exception
+Description : Exceptions used during heading extraction.
+
+Exceptions used during heading extraction.
+-}
 module HeadingExtract.Exception
   ( UnknownExtensionException(..)
   ) where

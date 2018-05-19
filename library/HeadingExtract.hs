@@ -1,3 +1,11 @@
+{-|
+Module      : HeadingExtract
+Description : Retrieves the headings from supported resources.
+
+Retrieves the headings from supported resources.
+
+Handles HTML via network and HTML/Markdown (with gzip) from the local filesystem.
+-}
 module HeadingExtract
   ( getResourceHeadings
   , getResourceHeadingsTrimmed
@@ -14,7 +22,7 @@ import           HeadingExtract.Network
 import           HeadingExtract.Types
 
 -- |Parses the resource and retrieves the headings. Handles HTML via network
--- and HTML/Markdown (with gzip) from local filesystem.
+-- and HTML/Markdown (with gzip) from the local filesystem.
 getResourceHeadings ::
      (MonadResource m, PrimMonad m, MonadThrow m)
   => String -- ^ Path to the resource

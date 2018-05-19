@@ -1,3 +1,9 @@
+{-|
+Module      : IndexerOptions
+Description : Command line arguments parsing for the indexer.
+
+Command line arguments parsing for the indexer.
+-}
 module IndexerOptions
   ( SearchOptions(..)
   , IndexOptions(..)
@@ -26,6 +32,7 @@ execOption =
 searchPhraseArgument :: Parser String
 searchPhraseArgument = argument str (metavar "PHRASE")
 
+-- |Search options
 data SearchOptions = SearchOptions
   { argPhrase :: String
   , optExec   :: String
@@ -42,6 +49,7 @@ resourceArguments =
     str
     (metavar "RESOURCES..." <> help "Paths or URLs to Markdown or HTML files")
 
+-- |Index options
 newtype IndexOptions = IndexOptions
   { argResources :: [String]
   } deriving (Show)
@@ -49,11 +57,13 @@ newtype IndexOptions = IndexOptions
 indexOptions :: Parser IndexOptions
 indexOptions = helper <*> (IndexOptions <$> resourceArguments)
 
+-- |The main command for the executable.
 data Command
   = Search SearchOptions
   | Index IndexOptions
   deriving (Show)
 
+-- |All the options for the executable.
 data Options = Options
   { optCommand   :: Command
   , optIndexFile :: FilePath
@@ -78,6 +88,7 @@ searchCommand =
 options :: Parser Options
 options = hsubparser (indexCommand <> searchCommand)
 
+-- |Parses command line arguments. Provides additional information when the arguments are invalid.
 parseOptions :: IO Options
 parseOptions =
   execParser

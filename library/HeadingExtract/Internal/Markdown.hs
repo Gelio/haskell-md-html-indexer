@@ -1,3 +1,9 @@
+{-|
+Module      : HeadingExtract.Internal.Markdown
+Description : Extracts headings from Markdown.
+
+Extracts headings from Markdown.
+-}
 module HeadingExtract.Internal.Markdown
   ( getHeadingsFromMarkdown
   , getHeadingsFromMarkdown'

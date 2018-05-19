@@ -1,3 +1,11 @@
+{-|
+Module      : HeadingExtract.File
+Description : Retrieves the headings from resources from the local filesystem.
+
+Retrieves the headings from resources from the local filesystem.
+
+Handles HTML/Markdown (with gzip) from the local filesystem.
+-}
 module HeadingExtract.File
   ( getFileHeadings
   ) where
