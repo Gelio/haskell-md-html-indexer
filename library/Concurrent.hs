@@ -16,7 +16,8 @@ import           System.IO.Unsafe        (unsafePerformIO)
 -- Adapted from http://hackage.haskell.org/package/base-4.11.1.0/docs/Control-Concurrent.html#g:12
 -- |Maps each item concurrently. A separate OS thread is used for each element.
 -- This functions wait for all created threads to finish before ending.
-mapConcurrently :: Foldable t
+mapConcurrently ::
+     Foldable t
   => (a -> IO ()) -- ^ The mapping function
   -> t a -- ^ Elements to map over
   -> IO ()

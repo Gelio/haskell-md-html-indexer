@@ -9,16 +9,16 @@ module Index
   ) where
 
 import           Conduit
-import           Control.Monad  (when)
-import           Data.Text      (Text, pack, singleton)
-import qualified Data.Text      as T
+import           Control.Monad        (when)
+import           Data.Text            (Text, pack, singleton)
+import qualified Data.Text            as T
 import           System.IO
 
-import           Concurrent     (mapConcurrently)
-import           Exception      (handleIOError)
+import           Concurrent           (mapConcurrently)
+import           Exception            (handleIOError)
 import           HeadingExtract
-import           IndexerOptions (IndexOptions (..))
 import           HeadingExtract.Types
+import           IndexerOptions       (IndexOptions (..))
 
 flushIndexedResults :: Bool
 flushIndexedResults = True

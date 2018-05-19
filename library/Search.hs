@@ -22,9 +22,10 @@ import           IndexerOptions
 import           Control.Exception    (SomeException, catch)
 
 -- |Searches the index file for matches.
-search :: SearchOptions -- ^The options used during searching.
-    -> FilePath -- ^The path to the index file.
-    -> IO ()
+search ::
+     SearchOptions -- ^The options used during searching.
+  -> FilePath -- ^The path to the index file.
+  -> IO ()
 search (SearchOptions phrase cmd) input =
   catch
     (do matches <-

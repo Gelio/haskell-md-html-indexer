@@ -25,7 +25,6 @@ anyErrorHandler msg e = putStrLn $ msg ++ ": " ++ show e
 ioErrorHandler :: String -> X.IOException -> IO ()
 ioErrorHandler msg e = putStrLn $ msg ++ ": " ++ getErrorMessage e
 
-
 getErrorMessage :: X.IOException -> String
 getErrorMessage e
   | isDoesNotExistError e = "File does not exist"
