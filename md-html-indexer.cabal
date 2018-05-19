@@ -19,6 +19,7 @@ library
   hs-source-dirs:      library
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
+    , optparse-applicative
     , conduit
     , conduit-extra
     , http-conduit
@@ -27,9 +28,13 @@ library
     , xml-types
     , text
     , markdown
+    , containers
+    , process
     , filepath
 
   exposed-modules:
+    Concurrent
+    Exception
     HeadingExtract
     HeadingExtract.Types
     HeadingExtract.Network
@@ -37,6 +42,9 @@ library
     HeadingExtract.Exception
     HeadingExtract.Internal.HTML
     HeadingExtract.Internal.Markdown
+    Index
+    IndexerOptions
+    Search
 
   ghc-options: -Wall
 
@@ -45,19 +53,7 @@ executable md-html-indexer
   main-is:             Main.hs
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
-    , conduit
-    , optparse-applicative
-    , text
-    , process
-    , containers
     , md-html-indexer
-
-  other-modules:
-    Index
-    IndexerOptions
-    Search
-    Exception
-    Concurrent
 
   ghc-options: -Wall -threaded
 
