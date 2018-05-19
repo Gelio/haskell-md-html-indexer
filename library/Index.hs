@@ -34,7 +34,10 @@ index (IndexOptions rs appendToIndex) output = do
   withFile output ioMode (\h -> mapConcurrently (safeIndexResource h) rs)
   putStrLn $ "Updated index at " ++ output
   where
-    ioMode = if appendToIndex then AppendMode else WriteMode
+    ioMode =
+      if appendToIndex
+        then AppendMode
+        else WriteMode
 
 -- |Indexes a single resource. Handles any exceptions.
 safeIndexResource :: Handle -> String -> IO ()
