@@ -23,7 +23,6 @@ import           IndexerOptions       (IndexOptions (..))
 flushIndexedResults :: Bool
 flushIndexedResults = True
 
--- TODO: append to index (as option)
 -- |Indexes HTML and Markdown resources and saves the index to a specified file.
 -- Handles:
 -- * HTML network resources
@@ -31,9 +30,11 @@ flushIndexedResults = True
 --
 -- Each resource is indexed concurrently and using streams.
 index :: IndexOptions -> FilePath -> IO ()
-index (IndexOptions rs) output = do
-  withFile output WriteMode (\h -> mapConcurrently (safeIndexResource h) rs)
+index (IndexOptions rs appendToIndex) output = do
+  withFile output ioMode (\h -> mapConcurrently (safeIndexResource h) rs)
   putStrLn $ "Updated index at " ++ output
+  where
+    ioMode = if appendToIndex then AppendMode else WriteMode
 
 -- |Indexes a single resource. Handles any exceptions.
 safeIndexResource :: Handle -> String -> IO ()

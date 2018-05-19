@@ -49,13 +49,17 @@ resourceArguments =
     str
     (metavar "RESOURCES..." <> help "Paths or URLs to Markdown or HTML files")
 
+appendToIndexSwitch :: Parser Bool
+appendToIndexSwitch = switch $ long "append-index" <> short 'a' <> help "Append to index file instead of replacing it" <> showDefault
+
 -- |Index options
-newtype IndexOptions = IndexOptions
+data IndexOptions = IndexOptions
   { argResources :: [String]
+  , switchAppend :: Bool
   } deriving (Show)
 
 indexOptions :: Parser IndexOptions
-indexOptions = helper <*> (IndexOptions <$> resourceArguments)
+indexOptions = helper <*> (IndexOptions <$> resourceArguments <*> appendToIndexSwitch)
 
 -- |The main command for the executable.
 data Command
