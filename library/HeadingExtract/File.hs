@@ -8,6 +8,7 @@ Handles HTML/Markdown (with gzip) from the local filesystem.
 -}
 module HeadingExtract.File
   ( getFileHeadings
+  , createHeadingExtractionConduit
   ) where
 
 import           Conduit
@@ -26,20 +27,27 @@ getFileHeadings ::
      (MonadResource m, PrimMonad m, MonadThrow m)
   => FilePath -- ^ Path to the file
   -> ConduitT i Heading m ()
-getFileHeadings s = getFileHeadings' s s (mapC id)
+getFileHeadings s = sourceFile s .| createHeadingExtractionConduit s
 
--- |Used internally to construct the proper conduits to read and parse the file.
-getFileHeadings' ::
-     (MonadResource m, PrimMonad m, MonadThrow m)
-  => FilePath -- ^ Full file path
-  -> String -- ^ Leftover file path. Further execution depends on this path's extension
-  -> ConduitT ByteString ByteString m () -- ^ The parsing conduit constructed so far
-  -> ConduitT i Heading m ()
-getFileHeadings' fullPath s c
-  | ext' == ".gz" = getFileHeadings' fullPath rest (c .| ungzip)
-  | ext' `elem` [".html", ".htm"] =
-    sourceFile fullPath .| c .| getHeadingsFromHTML
-  | ext' == ".md" = sourceFile fullPath .| c .| getHeadingsFromMarkdown
+-- |Constructs the proper conduits to parse the file and extract the headings.
+createHeadingExtractionConduit ::
+     (PrimMonad m, MonadThrow m)
+  => String -- ^ File path
+  -> ConduitT ByteString Heading m ()
+createHeadingExtractionConduit = createHeadingExtractionConduit' idConduit
+  where
+    idConduit = mapC id
+
+-- |Constructs the proper conduits to parse the file and extract the headings.
+createHeadingExtractionConduit' ::
+     (PrimMonad m, MonadThrow m)
+  => ConduitT ByteString ByteString m () -- ^ The parsing conduit constructed so far
+  -> String -- ^ Leftover file path. Further parsing depends on this path's extension
+  -> ConduitT ByteString Heading m ()
+createHeadingExtractionConduit' c s
+  | ext' == ".gz" = createHeadingExtractionConduit' (c .| ungzip) rest
+  | ext' `elem` [".html", ".htm"] = c .| getHeadingsFromHTML
+  | ext' == ".md" = c .| getHeadingsFromMarkdown
   | otherwise = throwM $ UnknownExtensionException ext'
   where
     (rest, ext) = splitExtension s

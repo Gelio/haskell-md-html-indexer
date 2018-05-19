@@ -13,6 +13,7 @@ import           Control.Exception (Exception)
 -- |Exception used when the file has an unknown extension.
 newtype UnknownExtensionException =
   UnknownExtensionException String
+  deriving (Eq)
 
 instance Show UnknownExtensionException where
   show (UnknownExtensionException ext) = "Unknown extension " ++ ext

@@ -8,11 +8,14 @@ import           System.Exit
 import           Test.HUnit
 
 import           Test.HeadingExtract                   (headingExtractTests)
+import           Test.HeadingExtract.File              (fileHeadingExtractTests)
 import           Test.HeadingExtract.Internal.HTML     (htmlTests)
 import           Test.HeadingExtract.Internal.Markdown (markdownTests)
 
 tests :: Test
-tests = TestList [htmlTests, markdownTests, headingExtractTests]
+tests =
+  TestList
+    [htmlTests, markdownTests, headingExtractTests, fileHeadingExtractTests]
 
 main :: IO ()
 main = do

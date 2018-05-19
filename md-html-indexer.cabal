@@ -67,9 +67,11 @@ test-suite md-html-indexer-tests
     , HUnit
     , md-html-indexer
     , conduit
+    , conduit-extra
     , bytestring
     , text
   other-modules:
+    Test.HeadingExtract.File
     Test.HeadingExtract.Internal.HTML
     Test.HeadingExtract.Internal.Markdown
     Test.HeadingExtract
