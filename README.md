@@ -2,7 +2,7 @@
 
 This project is split into 3 parts:
 
-* library
+* library (contains most of the code)
 * executable
 * tests
 
@@ -27,6 +27,12 @@ stack exec md-html-indexer -- search headings -e "ls -al {}"
 hfmt executable library tests -w
 ```
 
+`hfmt` may be installed by executing:
+
+```bash
+stack install --resolver lts-9.21 hfmt
+```
+
 ## Linting
 
 ```bash
@@ -34,6 +40,10 @@ hlint executable library tests
 ```
 
 ## Running tests
+
+Tests are written only for the parsing part (unit tests). No end to end tests have been created
+that would test executing HTTP requests or reading files from the filesystem. They are expected
+to be executed manually.
 
 ```bash
 stack test
@@ -44,6 +54,10 @@ stack test
 ```bash
 stack haddock
 ```
+
+The command output contains the path to the documentation.
+
+For me it was [.stack-work/install/x86_64-linux/lts-11.6/8.2.2/doc/index.html](.stack-work/install/x86_64-linux/lts-11.6/8.2.2/doc/index.html).
 
 ## Example commands to test for concurrency
 
