@@ -11,7 +11,6 @@ module Concurrent
 import           Control.Concurrent      (ThreadId, forkOS)
 import           Control.Concurrent.MVar (MVar, newEmptyMVar, newMVar, putMVar,
                                           takeMVar)
-import           System.IO.Unsafe        (unsafePerformIO)
 
 -- Adapted from http://hackage.haskell.org/package/base-4.11.1.0/docs/Control-Concurrent.html#g:12
 -- |Maps each item concurrently. A separate OS thread is used for each element.
@@ -21,21 +20,21 @@ mapConcurrently ::
   => (a -> IO ()) -- ^ The mapping function
   -> t a -- ^ Elements to map over
   -> IO ()
-mapConcurrently f list = mapM_ (forkChild . f) list >> waitForChildren
+mapConcurrently f list = do
+  children <- newMVar []
+  mapM_ (forkChild children . f) list >> waitForChildren children
   where
-    children :: MVar [MVar ()]
-    children = unsafePerformIO (newMVar [])
-    waitForChildren :: IO ()
-    waitForChildren = do
+    waitForChildren :: MVar [MVar ()] -> IO ()
+    waitForChildren children = do
       cs <- takeMVar children
       case cs of
         [] -> return ()
         m:ms -> do
           putMVar children ms
           takeMVar m
-          waitForChildren
-    forkChild :: IO () -> IO ThreadId
-    forkChild io = do
+          waitForChildren children
+    forkChild :: MVar [MVar ()] -> IO () -> IO ThreadId
+    forkChild children io = do
       mvar <- newEmptyMVar
       childs <- takeMVar children
       putMVar children (mvar : childs)
